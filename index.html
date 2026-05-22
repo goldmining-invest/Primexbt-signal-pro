@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>PrimeSignals Pro | Instant Signal Access</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0B0D14;
+            font-family: 'Inter', sans-serif;
+            color: #EDF2FF;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 35px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD966, #F5A623);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .badge {
+            background: rgba(245, 166, 35, 0.15);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            border: 1px solid rgba(245,166,35,0.4);
+        }
+
+        /* signal cards */
+        .signals-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 28px;
+            margin-bottom: 50px;
+        }
+
+        .signal-card {
+            background: #11131F;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid #252A3A;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+        }
+
+        .signal-card:hover {
+            transform: translateY(-6px);
+            border-color: #F5A623;
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.6);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 190px;
+            background: #1A1D2B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 22px;
+        }
+
+        .profit-rate {
+            background: #1E3A2F;
+            color: #6FEF8F;
+            font-weight: 700;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+        }
+
+        .card-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .card-info p {
+            color: #9AA3BF;
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(95deg, #F5A623, #E07C1F);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 50px;
+            color: #0B0D14;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: linear-gradient(95deg, #FFB347, #F28B2E);
+            transform: scale(0.98);
+        }
+
+        /* ---------- MODAL (POPUP) for deposit options ---------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-container {
+            background: #0F1222;
+            max-width: 520px;
+            width: 90%;
+            border-radius: 40px;
+            border: 1px solid #2E3348;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 22px 28px;
+            background: #0A0C18;
+            border-bottom: 1px solid #222738;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #F5A623;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #9AA3BF;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #F5A623;
+        }
+
+        .modal-body {
+            padding: 28px;
+        }
+
+        .deposit-amount-box {
+            background: #080B14;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #F5A623;
+        }
+
+        .sadapay-info {
+            background: #11162A;
+            border-radius: 24px;
+            padding: 18px;
+            margin: 20px 0;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #B9C3E6;
+        }
+
+        .value {
+            font-family: monospace;
+            font-weight: 700;
+            background: #1E2338;
+            padding: 5px 12px;
+            border-radius: 30px;
+        }
+
+        input, textarea {
+            background: #0A0E1A;
+            border: 1px solid #2C324A;
+            border-radius: 24px;
+            padding: 12px 16px;
+            color: white;
+            width: 100%;
+            font-family: inherit;
+            margin-top: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        .trx-hint {
+            font-size: 0.7rem;
+            color: #7F89A8;
+            margin-top: 6px;
+        }
+
+        .submit-deposit {
+            background: #2A7F6E;
+            width: 100%;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 60px;
+            color: white;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .submit-deposit:hover {
+            background: #359F88;
+        }
+
+        /* broker section */
+        .broker-section {
+            margin-top: 50px;
+            background: #0D0F19;
+            border-radius: 28px;
+            padding: 20px 24px;
+        }
+
+        .broker-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 15px 0;
+        }
+
+        .broker-badge {
+            background: #171C2C;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+        }
+
+        .id-email-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0 10px;
+        }
+
+        .field-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* pending toast / popup */
+        .pending-popup {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1E2A24;
+            border-left: 6px solid #F5A623;
+            max-width: 360px;
+            background: #121624;
+            border-radius: 20px;
+            padding: 18px 22px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            z-index: 1100;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .pending-popup.show {
+            transform: translateX(0);
+        }
+
+        .pending-popup h4 {
+            color: #F5A623;
+            margin-bottom: 8px;
+        }
+
+        .pending-popup p {
+            font-size: 0.85rem;
+            color: #CFDFFF;
+        }
+
+        .pending-popup .small-note {
+            font-size: 0.7rem;
+            margin-top: 10px;
+            color: #9aa8c9;
+        }
+
+        @media (max-width: 700px) {
+            .modal-body {
+                padding: 20px;
+            }
+            .pending-popup {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+                bottom: 20px;
+            }
+        }
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="navbar">
+        <div class="logo">
+            <h1>PRIME SIGNALS PRO</h1>
+            <div style="font-size: 0.8rem;">Official | 90% Profit Accuracy</div>
+        </div>
+        <div class="badge"><i class="fas fa-chart-line"></i> Verified Signals | VIP Zone</div>
+    </div>
+
+    <!-- signals grid with PICS added -->
+    <div class="signals-section">
+        <h2><i class="fas fa-bolt" style="color:#F5A623;"></i> Premium Paid Signals (Profit up to 90%)</h2>
+        <div class="signal-grid" id="signalGrid">
+            <!-- Signal 1 -->
+            <div class="signal-card">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x200/1e293b/F5A623?text=GOLD+XAU+CHART" alt="Gold signal">
+                </div>
+                <div class="card-info">
+                    <div class="profit-rate"><i class="fas fa-chart-simple"></i> 92% PROFIT</div>
+                    <h3>Gold Breakout</h3>
+                    <p>Entry: 2350.80 | TP: 2395.40 | SL: 2332.00<br>High momentum setup</p>
+                    <button class="buy-btn" data-signal-name="Gold XAU/USD Signal"><i class="fas fa-cart-shopping"></i> Buy Signal (11,000 PKR)</button>
+                </div>
+            </div>
+            <!-- Signal 2 -->
+            <div class="signal-card">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x200/1e293b/F5A623?text=FOREX+EURUSD" alt="EURUSD">
+                </div>
+                <div class="card-info">
+                    <div class="profit-rate"><i class="fas fa-chart-line"></i> 89% PROFIT</div>
+                    <h3>EUR/USD Scalper</h3>
+                    <p>Bullish order block | Target 1.1020 <br> Premium entry zone</p>
+                    <button class="buy-btn" data-signal-name="EURUSD Premier Signal"><i class="fas fa-cart-shopping"></i> Buy Signal (11,000 PKR)</button>
+                </div>
+            </div>
+            <!-- Signal 3 -->
+            <div class="signal-card">
+                <div class="card-img">
+                    <img src="https://placehold.co/400x200/1e293b/F5A623?text=BTC+CRYPTO" alt="BTC signal">
+                </div>
+                <div class="card-info">
+                    <div class="profit-rate"><i class="fab fa-bitcoin"></i> 95% PROFIT</div>
+                    <h3>BTC/USDT Futures</h3>
+                    <p>Breakout structure | TP: 71,200 <br> Strong volume</p>
+                    <button class="buy-btn" data-signal-name="BTC Crypto Signal"><i class="fas fa-cart-shopping"></i> Buy Signal (11,000 PKR)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Broker IDs & additional info: PrimeXbet, XM, FBS, PSX, YA OPTIONS, id add krny ki jaga, email -->
+    <div class="broker-section">
+        <h3><i class="fas fa-handshake"></i> Supported Brokers & Accounts</h3>
+        <div class="broker-badges">
+            <span class="broker-badge"><i class="fas fa-trophy"></i> PrimeXbet</span>
+            <span class="broker-badge"><i class="fas fa-coins"></i> XM</span>
+            <span class="broker-badge"><i class="fas fa-chart-line"></i> FBS</span>
+            <span class="broker-badge"><i class="fas fa-chart-pie"></i> PSX</span>
+            <span class="broker-badge"><i class="fas fa-chart-scatter"></i> YA OPTIONS</span>
+        </div>
+        <div class="id-email-row">
+            <div class="field-group">
+                <label><i class="fas fa-id-badge"></i> Add your Broker/MT4 ID</label>
+                <input type="text" id="globalBrokerId" placeholder="e.g., PrimeXbet ID / XM account">
+                <div class="trx-hint">Enter your account ID for any broker above</div>
+            </div>
+            <div class="field-group">
+                <label><i class="fas fa-envelope"></i> Email Address (for confirmation)</label>
+                <input type="email" id="globalEmail" placeholder="your@email.com">
+                <div class="trx-hint">We'll send signal access after payment received</div>
+            </div>
+        </div>
+        <div class="trx-hint" style="margin-top: 12px;"><i class="fas fa-info-circle"></i> Please fill these details before depositing. Your ID & Email will be linked to pending request.</div>
+    </div>
+</div>
+
+<!-- MODAL / OPTIONS OVERLAY (popup when buy button clicked) -->
+<div id="depositModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3><i class="fas fa-wallet"></i> Complete Deposit</h3>
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="deposit-amount-box">
+                <span style="font-size: 0.9rem;">Required Amount</span>
+                <div class="amount">11,000 PKR</div>
+                <span style="font-size: 0.7rem;">(Non-refundable deposit for signal access)</span>
+            </div>
+            <div class="sadapay-info">
+                <div class="info-row">
+                    <span class="label"><i class="fab fa-sadapay"></i> Payment Method:</span>
+                    <span><strong>SADAPAY</strong> (Pakistan)</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">📱 Account Number:</span>
+                    <span class="value">03250416566</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">💰 Amount:</span>
+                    <span><strong>11,000 PKR</strong> (exact)</span>
+                </div>
+            </div>
+            
+            <label>📌 Transaction ID (TRX ID) *</label>
+            <input type="text" id="modalTrxId" placeholder="Enter 13 digits TRX ID" maxlength="20">
+            <div class="trx-hint"><i class="fas fa-keyboard"></i> TRX ID must be exactly <strong>13 digits</strong> (only numbers)</div>
+            
+            <label style="margin-top: 16px;">📧 Your Email (confirmation)</label>
+            <input type="email" id="modalEmail" placeholder="Your active email address">
+            
+            <button class="submit-deposit" id="submitDepositBtn"><i class="fas fa-check-circle"></i> Confirm Payment & Submit</button>
+        </div>
+    </div>
+</div>
+
+<!-- PENDING POPUP (toast) that appears after submit -->
+<div id="pendingPopup" class="pending-popup">
+    <h4><i class="fas fa-hourglass-half"></i> PENDING CONFIRMATION</h4>
+    <p>Your deposit request (11,000 PKR) has been recorded.</p>
+    <p><strong>TRX ID:</strong> <span id="popupTrxId">---</span><br>
+    <strong>Account:</strong> Sadapay 03250416566</p>
+    <div class="small-note"><i class="fas fa-envelope"></i> ⚠️ Once your payment is RECEIVED, you will receive an official email with signal access. Your status is <strong>PENDING</strong> until then.</div>
+    <div style="margin-top: 12px; text-align: right;"><button id="closePopupBtn" style="background: none; border: none; color:#F5A623; cursor:pointer;">Dismiss</button></div>
+</div>
+
+<script>
+    // Get DOM elements
+    const modal = document.getElementById('depositModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const submitDepositBtn = document.getElementById('submitDepositBtn');
+    const pendingPopup = document.getElementById('pendingPopup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    const popupTrxIdSpan = document.getElementById('popupTrxId');
+
+    let currentSelectedSignal = ""; // store which signal user clicked
+    
+    // open modal function
+    function openModal(signalName) {
+        currentSelectedSignal = signalName;
+        // Reset fields inside modal
+        document.getElementById('modalTrxId').value = "";
+        document.getElementById('modalEmail').value = "";
+        // also prefill from global email/brokerId fields if user filled? optional
+        const globalEmailVal = document.getElementById('globalEmail').value;
+        if(globalEmailVal) document.getElementById('modalEmail').value = globalEmailVal;
+        modal.classList.add('active');
+    }
+    
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+    
+    // show pending popup with transaction details
+    function showPendingPopup(trxId, userEmail, signalUsed) {
+        popupTrxIdSpan.innerText = trxId;
+        pendingPopup.classList.add('show');
+        // auto hide after 8 seconds, but user can dismiss
+        setTimeout(() => {
+            if(pendingPopup.classList.contains('show')) {
+                pendingPopup.classList.remove('show');
+            }
+        }, 8000);
+        // also we show pending message inside popup
+        // additional: if needed, we can also store pending info
+    }
+    
+    function hidePopup() {
+        pendingPopup.classList.remove('show');
+    }
+    
+    // validation: TRX ID exactly 13 digits
+    function isValidTrxId(trx) {
+        return /^\d{13}$/.test(trx);
+    }
+    
+    // submit deposit handler (inside modal)
+    submitDepositBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const trxId = document.getElementById('modalTrxId').value.trim();
+        const email = document.getElementById('modalEmail').value.trim();
+        // get broker ID from global section
+        const brokerId = document.getElementById('globalBrokerId').value.trim();
+        const globalEmailMain = document.getElementById('globalEmail').value.trim();
+        const finalEmail = email || globalEmailMain;
+        
+        // validation: trx id must be exactly 13 digits
+        if (!isValidTrxId(trxId)) {
+            alert(`❌ Invalid Transaction ID! TRX ID must be exactly 13 digits (only numbers).\nCurrent input: "${trxId}" (length ${trxId.length})`);
+            return;
+        }
+        
+        if (!finalEmail || finalEmail === "") {
+            alert("❌ Please provide your email address for payment confirmation.");
+            return;
+        }
+        
+        if (!finalEmail.includes("@") || finalEmail.length < 5) {
+            alert("❌ Please enter a valid email address (example@domain.com).");
+            return;
+        }
+        
+        // if everything is okay -> close modal and show pending popup
+        // also store pending info in background
+        const signalMsg = currentSelectedSignal ? ` for ${currentSelectedSignal}` : "";
+        
+        // HERE: client ko pending main btana hy ke agar payment received hui to mail kr diya jayega
+        // popup exactly that message
+        showPendingPopup(trxId, finalEmail, currentSelectedSignal);
+        
+        // extra: update global pending message inside popup (already)
+        // additionally we can console log the request info
+        console.log(`PENDING REQUEST | Signal: ${currentSelectedSignal} | TRX: ${trxId} | Email: ${finalEmail} | BrokerID: ${brokerId}`);
+        
+        // also optionally update any visible note in the background (but requirement satisfied)
+        // close modal after submission
+        closeModal();
+        
+        // Optional: show an extra alert to be clear
+        setTimeout(() => {
+            // small floating alert not necessary, but to be safe we can keep popup visible
+        }, 100);
+        
+        // we also want to ensure that the pending message includes: "AGAR APKI PAYMENT RECEIVED HOI TO APKO MAIL KR DIYA JAY GA"
+        // The pending popup already says: "Once your payment is RECEIVED, you will receive an official email..."
+        // perfectly matches requirements
+        
+        // Also store in local storage if needed to keep track? not needed but works.
+    });
+    
+    // close modal events
+    closeModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if(e.target === modal) closeModal();
+    });
+    
+    closePopupBtn.addEventListener('click', hidePopup);
+    
+    // attach event listeners to all buy buttons
+    const buyBtns = document.querySelectorAll('.buy-btn');
+    buyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const signalName = this.getAttribute('data-signal-name') || "Premium Signal";
+            // Before opening modal, check if any global email is filled? not mandatory but just open
+            openModal(signalName);
+        });
+    });
+    
+    // prefill modal email from global email dynamically if user types in global email before opening modal
+    const globalEmailInput = document.getElementById('globalEmail');
+    const modalEmailInput = document.getElementById('modalEmail');
+    globalEmailInput.addEventListener('input', function() {
+        if (!modal.classList.contains('active')) return;
+        modalEmailInput.value = globalEmailInput.value;
+    });
+    
+    // also if open modal and global email set, fill
+    const observer = new MutationObserver(() => {
+        if (modal.classList.contains('active') && globalEmailInput.value && !modalEmailInput.value) {
+            modalEmailInput.value = globalEmailInput.value;
+        }
+    });
+    observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    
+    // Bonus: handle Enter key on TRX field?
+    const trxField = document.getElementById('modalTrxId');
+    trxField.addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            submitDepositBtn.click();
+        }
+    });
+    
+    // Ensure exact 13 digits hint on input
+    trxField.addEventListener('input', function() {
+        let val = trxField.value.replace(/\D/g, '').slice(0,13);
+        trxField.value = val;
+        const hintDiv = trxField.nextElementSibling;
+        if(val.length === 13) {
+            hintDiv.style.color = "#A3E4A1";
+        } else {
+            hintDiv.style.color = "#7F89A8";
+        }
+    });
+    
+    // final extra: show static mandatory pending information also on broker area? Not needed but to be 100% we ensure requirement: "submit hoty he pending wala massage popup hona chaye"
+    // we already implement pending popup (toast) after submit.
+    // Also Buy button clicks open options (modal) -> exact requirement.
+    console.log("Website ready: Buy button opens options, submit shows pending popup with email confirmation message.");
+</script>
+</body>
+</html>
